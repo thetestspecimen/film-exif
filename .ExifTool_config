@@ -1,0 +1,22 @@
+%Image::ExifTool::UserDefined = (
+    'Image::ExifTool::XMP::Main' => {
+        AnalogueData => {
+            SubDirectory => {
+                TagTable => 'Image::ExifTool::UserDefined::AnalogueData',
+            },
+        },
+    },
+);
+%Image::ExifTool::UserDefined::AnalogueData = (
+    GROUPS => { 0 => 'XMP', 1 => 'XMP-AnalogueData', 2 => 'Film' },
+    NAMESPACE => { 'AnalogueData' => 'https://filmgra.in/AnalogueData/1.0/' },
+    WRITABLE => 'string',
+    FilmMaker => { },
+    FilmName => { },
+    FilmFormat => { },
+    FilmDevelopProcess => { },
+    FilmDeveloper => { },
+    FilmProcessLab => { },
+    FilmScanner => { },
+    LensFilter => { Groups => { 2 => 'Camera' } },
+);
