@@ -1,0 +1,202 @@
+#!/usr/bin/env bash
+
+export LANG=C.UTF-8
+copyright="©"
+year=$(date +'%Y')
+
+# User Configuration Section #######################
+
+# Change any info within the quotes
+
+COPYRIGHT="${copyright} Copyright ${year} thetestspecimen. All Rights Reserved."
+COPYRIGHT_OWNER="thetestspecimen"
+COPYRIGHT_INFO_URL="https://filmgra.in/copyright/"
+USAGE_TERMS="No usage without prior written consent from thetestspecimen"
+CONTACT_EMAIL="info@filmgra.in"
+WEBSITE="https://filmgra.in"
+
+# add as many cameras as you like following the number convention
+# remember to update the NUMBER_OF_CAMERAS
+# format in brackets ( "Camera Make" "Camera Make and Model" "Camera Serial Number")
+
+NUMBER_OF_CAMERAS=3
+CAMERA1=( "Asahi Pentax" "Asahi Pentax Spotmatic F" "4718308" )
+CAMERA2=( "Zenza Bronica" "Zenza Bronica EC-TL" "CB356121" )
+CAMERA3=( "Yashica" "Yashica Electro 35" "91049652" )
+
+# add as many film types as you like to the array
+
+FILM_SIZES=( "35mm" "120" "220" "Large Format" )
+
+# add as many films as you like following the number convention
+# remember to update the NUMBER_OF_FILMS
+# format in brackets ( "Film Make" "Film Make and Type" "Processing i.e. Black and White, C41 or E6" "ISO")
+
+NUMBER_OF_FILMS=32
+FILM1=( "Ilford" "Ilford Delta 100" "Black and White" "100" )
+FILM2=( "Ilford" "Ilford Delta 400" "Black and White" "400" ) 
+FILM3=( "Ilford" "Ilford Delta 3200" "Black and White" "3200" ) 
+FILM4=( "Ilford" "Ilford FP4 Plus" "Black and White" "125" ) 
+FILM5=( "Ilford" "Ilford HP5 Plus" "Black and White" "400" ) 
+FILM6=( "Ilford" "Ilford Pan F Plus" "Black and White" "50" ) 
+FILM7=( "Ilford" "Ilford Ortho Plus" "Black and White" "80" ) 
+FILM8=( "Ilford" "Ilford SFX 200" "Black and White" "200" ) 
+FILM9=( "Ilford" "Ilford XP2 Super" "C41" "400" )
+FILM10=( "Kentmere" "Kentmere Pan 100" "Black and White" "100") 
+FILM11=( "Kentmere" "Kentmere Pan 400" "Black and White" "400" ) 
+FILM12=( "Kodak" "Kodak Tri-X 400" "Black and White" "400" ) 
+FILM13=( "Kodak" "Kodak Ultramax 400" "C41" "400" ) 
+FILM14=( "Kodak" "Kodak T-Max 100" "Black and White" "100" ) 
+FILM15=( "Kodak" "Kodak T-Max 400" "Black and White" "400" ) 
+FILM16=( "Kodak" "Kodak T-Max P3200" "Black and White" "3200" ) 
+FILM17=( "Kodak" "Kodak Gold 200" "C41" "200" ) 
+FILM18=( "Kodak" "Kodak Portra 160" "C41" "160" ) 
+FILM19=( "Kodak" "Kodak Portra 400" "C41" "400" ) 
+FILM20=( "Kodak" "Kodak Portra 800" "C41" "800" ) 
+FILM21=( "Kodak" "Kodak Ektar 100" "C41" "100" ) 
+FILM22=( "Kodak" "Kodak Ektachrome E100" "E6" "100" ) 
+FILM23=( "Kodak" "Kodak Ektachrome 64T" "E6" "64" ) 
+FILM24=( "Kodak" "Kodak Ektachrome 160T" "E6" "160" ) 
+FILM25=( "Rollei" "Rollei Infrared" "Black and White" "400" ) 
+FILM26=( "Fuji" "Fuji Pro 400H" "C41" "400" )
+FILM27=( "Fuji" "Fuji Superior 200" "C41" "200" )
+FILM28=( "Fuji" "Fuji Superior X-tra 400" "C41" "400" )
+FILM29=( "Fuji" "Fuji Provia F 100" "E6" "100" )
+FILM30=( "Fuji" "Fuji Velvia 50" "E6" "50" )
+FILM31=( "Fuji" "Fuji Velvia 100" "E6" "100" )
+FILM32=( "Fuji" "Fuji Fujichrome 64T" "E6" "64" )
+
+# User Configuration End ###########################
+
+# Code Start - EDIT AT OWN RISK ###############
+
+# Clear all EXIF data
+printf "\n"
+read -e -p "Would you like to erase all current EXIF data before proceeding? (Y(yes)/N(no)): " PROCEED
+
+if [[ "$PROCEED" = "Y" || "$PROCEED" = "y" || "$PROCEED" = "yes" || "$PROCEED" = "Yes" || "$PROCEED" = "YES" ]]
+then
+	exiftool -overwrite_original -m -all= "$1"
+    printf "\nAll EXIF data erased successfully\n\n"
+else
+    printf "\nNothing Erased\n\n"
+fi
+
+# Print available cameras
+
+for ((i=1 ; i<=$NUMBER_OF_CAMERAS ; i++))
+do
+	cam_name="CAMERA$i[1]"
+    ser_num="CAMERA$i[2]"
+	echo "$i. ${!cam_name} ${!ser_num}"
+done
+ 
+# Ask user for new values
+printf "\n"
+read -e -p "Please pick a camera by number: " CAMERA_NUMBER
+
+# Assign chosen camera
+
+make="CAMERA$CAMERA_NUMBER[0]"
+model="CAMERA$CAMERA_NUMBER[1]"
+snumber="CAMERA$CAMERA_NUMBER[2]"
+MAKE="${!make}"
+MODEL="${!model}"
+SERIAL_NUMBER="${!snumber}"
+
+# Print available film sizes
+printf "\n"
+for ((i=1 ; i<=${#FILM_SIZES[@]} ; i++))
+do
+	echo "$i. ${FILM_SIZES[$i-1]}"
+done
+
+# Request film size
+printf "\n"
+read -e -p "Please specify a film format by number: " CHOSEN_FILM_SIZE
+
+# Assign chosen film size
+
+FILM_SIZE=${FILM_SIZES[$CHOSEN_FILM_SIZE-1]}
+
+# Print available films
+printf "\n"
+for ((i=1 ; i<=$NUMBER_OF_FILMS ; i++))
+do
+	film_name="FILM$i[1]"
+	echo "$i. ${!film_name}"
+done
+
+# Request film name
+printf "\n"
+read -e -p "Please pick a film by number: " FILM_NUMBER
+
+# Assign chosen film
+
+fmaker="FILM$FILM_NUMBER[0]"
+fname="FILM$FILM_NUMBER[1]"
+fprocess="FILM$FILM_NUMBER[2]"
+fiso="FILM$FILM_NUMBER[3]"
+F_MAKER="${!fmaker}"
+F_NAME="${!fname}"
+F_PROCESS="${!fprocess}"
+F_ISO="${!fiso}"
+
+# set film source type
+
+if [ "${!fprocess}" = "E6" ]
+then
+	DIGITAL_SOURCE_TYPE="http://cv.iptc.org/newscodes/digitalsourcetype/positiveFilm"
+else
+	DIGITAL_SOURCE_TYPE="http://cv.iptc.org/newscodes/digitalsourcetype/negativeFilm"
+fi
+
+# Request film developer
+printf "\n"
+read -e -p "Please specify the film developer (e.g. Ilford Ilfosol 3): " FILM_CHEMICAL
+
+# Request film processing lab
+printf "\n"
+read -e -p "Please specify the lab the film was processed in (e.g. Home, Ilford, etc.): " FILM_LAB
+
+# Request film scanner
+printf "\n"
+read -e -p "Please specify the film scanner used (e.g. DSLR, Noritsu, etc.): " FILM_SCANNER
+
+printf "\nWriting data...\n\n"
+ 
+# write the information to file
+exiftool \
+    -overwrite_original -m -all= \
+    -XMP-tiff:Make="$MAKE" \
+    -XMP-tiff:Model="$MODEL" \
+    -XMP-AnalogueData:FilmMaker="$F_MAKER" \
+    -XMP-AnalogueData:FilmName="$F_NAME" \
+    -XMP-AnalogueData:FilmFormat="$FILM_SIZE" \
+    -XMP-AnalogueData:FilmDevelopProcess="$F_PROCESS" \
+    -XMP-AnalogueData:FilmDeveloper="$FILM_CHEMICAL" \
+    -XMP-AnalogueData:FilmProcessLab="$FILM_LAB" \
+    -XMP-AnalogueData:FilmScanner="$FILM_SCANNER" \
+    -XMP-xmpRights:WebStatement="$COPYRIGHT_INFO_URL" \
+    -XMP-xmpRights:UsageTerms="$USAGE_TERMS" \
+    -XMP-dc:creator="$COPYRIGHT_OWNER" \
+    -XMP-dc:rights="$COPYRIGHT" \
+    -XMP-photoshop:Credit="$COPYRIGHT_OWNER" \
+    -XMP-iptcCore:CreatorWorkEmail="$CONTACT_EMAIL" \
+    -XMP-iptcCore:CreatorWorkURL="$WEBSITE" \
+    -XMP-plus:CopyrightOwnerName="$COPYRIGHT_OWNER" \
+    -XMP-plus:ImageCreatorName="$COPYRIGHT_OWNER" \
+    -XMP-plus:LicensorName="$COPYRIGHT_OWNER" \
+    -XMP-plus:LicensorURL="$WEBSITE" \
+    -XMP-plus:LicensorEmail="$CONTACT_EMAIL" \
+    -XMP-IptcExt:DigitalSourceType="$DIGITAL_SOURCE_TYPE" \
+    -XMP-exif:ISO="$F_ISO" \
+    -XMP-exifEX:SerialNumber="$SERIAL_NUMBER" \
+    -XMP-exifEX:OwnerName="$COPYRIGHT_OWNER" \
+    -XMP-exifEX:ISOSpeed="$F_ISO" \
+    "$1"
+
+printf "\nData written successfully.\n\n"
+ 
+# display all the information from the file
+exiftool -m -a -g1 "$1"

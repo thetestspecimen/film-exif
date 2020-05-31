@@ -1,0 +1,179 @@
+#!/usr/bin/env bash
+
+export LANG=C.UTF-8
+copyright="©"
+
+# User Configuration Section #######################
+
+# add as many lenses as you like following the number convention
+# remember to update the NUMBER_OF_LENSES
+
+NUMBER_OF_LENSES=5
+LENSE1=( "Asahi" "Super-Multi-Coated Takumar 1:3.5/28" "3.5" "28" "4595856" )
+LENSE2=( "Asahi" "Super-Multi-Coated Takumar 1:1.4/50" "1.4" "50" "5531315" )
+LENSE3=( "Jupiter" "Jupiter-9 2/85" "2.0" "85" "N7211481" )
+LENSE4=( "Nikon" "Nikkor-P.C 1:4 f=200mm" "4.0" "200" "77934" )
+LENSE5=( "Yashica" "Yashinon-DX 1:1.7 f=45mm" "1.7" "45" "91049652" )
+
+
+# User Configuration End ###########################
+
+# Code Start - EDIT AT OWN RISK ###############
+
+# Image description
+printf "\n"
+printf "Image Description\n"
+printf "From IPTC: Enter a 'caption' describing the who, what, and why of what is happening in this image, this might include names of people, and/or their role in the action that is taking place within the image.\n\n"
+read -e -p "Please write a description of the image: " DESCRIPTION
+
+# Image headline
+printf "\n"
+printf "Image Headline\n"
+printf "From IPTC: Enter a brief publishable synopsis or summary of the contents of the image.\n\n"
+read -e -p "Please write a headline for the image: " HEADLINE
+
+# Image title
+printf "\n"
+printf "Image Title\n"
+printf "From IPTC: Enter a short verbal and human readable name for the image, this may be the file name\n\n"
+read -e -p "Please write a title for the image: " TITLE
+
+# update dc:subject (Keywords)
+printf "\n"
+read -e -p "Please input a comma separated list of keywords (e.g. white,cat,animal,playing cat,fur): " KEYWORDS
+OIFS=$IFS
+IFS=","
+KEYWORDSARR=($KEYWORDS)
+IFS=$OIFS
+
+# build a command to write the keywords in the correct format
+SUBJECT="exiftool -overwrite_original -m "
+for WORD in ${KEYWORDSARR[@]}
+do
+    SUBJECT=${SUBJECT}" -XMP-dc:subject="$WORD
+done
+SUBJECT=${SUBJECT}\ \"$1\"
+
+# Image number
+printf "\n"
+read -e -p "Image number on the film roll: " IMG_NO
+
+# Date Created
+printf "\n"
+printf "Please enter the date and time the image was created in the following format (2020:01:22 13:30:02+02:00)\n"
+read -e -p "You can include only the date if the time is not known (e.g. 2020:01:22):" DATE_CREATED
+
+# Get the location dipicted in the image
+printf "\n"
+printf "You will now be requested to enter details about the location shown in the photo. Enter whichever details are relevant.\n"
+read -e -p "World Region: " WORLD_REGION
+read -e -p "Country Name: " COUNTRY_NAME
+read -e -p "Three or two letter country code (e.g. GB, US, IT etc.): " COUNTRY_CODE
+read -e -p "State/Province/County: " PROVINCE
+read -e -p "City: " CITY
+read -e -p "Sub Location (e.g. The Bronx, Statue of Liberty etc.): " SUB_LOCATION
+read -e -p "Location Name (specifically is depicted in the image): " LOCATION_NAME
+read -e -p "Latitude in decimal format (e.g. 52.652979): " LATITUDE
+read -e -p "Longitude in decimal format (e.g. -1.427812): " LONGITUDE
+read -e -p "Was the photo taken above (enter 0) or below (enter 1) sea level: " ALTITUDE_REF
+read -e -p "Absolute altitude in metres (Note: always a positive value, even if you were below sea level e.g. for -5m enter 5): " ALTITUDE
+
+printf "\n"
+printf "You can also specify where the photo was taken from, if it is not the same as the location depicted in the image.\n"
+read -e -p "Do you wish to specify where the photo was taken from? [otherwise the data already specified will be used] (Y(yes)/N(no)): " PROCEED
+if [[ "$PROCEED" = "Y" || "$PROCEED" = "y" || "$PROCEED" = "yes" || "$PROCEED" = "Yes" || "$PROCEED" = "YES" ]]
+then
+    read -e -p "World Region: " WORLD_REGION2
+    read -e -p "Country Name: " COUNTRY_NAME2
+    read -e -p "Three or two letter country code (e.g. GB, US, IT etc.): " COUNTRY_CODE2
+    read -e -p "State/Province/County: " PROVINCE2
+    read -e -p "City: " CITY2
+    read -e -p "Sub Location (e.g. The Bronx, Statue of Liberty etc.): " SUB_LOCATION2
+    read -e -p "Location Name (specifically is depicted in the image): " LOCATION_NAME2
+    read -e -p "Latitude in decimal format (e.g. 52.652979): " LATITUDE2
+    read -e -p "Longitude in decimal format (e.g. -1.427812): " LONGITUDE2
+    read -e -p "Absolute altitude in metres (Note: always a positive value, even if you were below sea level e.g. for -5m enter 5): " ALTITUDE2
+else
+    WORLD_REGION2="$WORLD_REGION"
+    COUNTRY_NAME2="$COUNTRY_NAME"
+    COUNTRY_CODE2="$COUNTRY_CODE"
+    PROVINCE2="$PROVINCE"
+    CITY2="$CITY"
+    SUB_LOCATION2="$SUB_LOCATION"
+    LOCATION_NAME2="$LOCATION_NAME"
+    LATITUDE2="$LATITUDE"
+    LONGITUDE2="$LONGITUDE"
+    ALTITUDE2="$ALTITUDE"
+fi
+
+# Print available lenses
+printf "\n"
+for ((i=1 ; i<=$NUMBER_OF_LENSES ; i++))
+do
+	lens_make="LENSE$i[0]"
+	lens_model="LENSE$i[1]"
+	echo "$i. ${!lens_make} ${!lens_model}"
+done
+ 
+# Ask user for new values
+printf "\n"
+read -e -p "Please pick a lense by number: " LENSE_NUMBER
+
+# Assign chosen camera
+
+make="LENSE$LENSE_NUMBER[0]"
+model="LENSE$LENSE_NUMBER[1]"
+maperture="LENSE$LENSE_NUMBER[2]"
+flength="LENSE$LENSE_NUMBER[3]"
+snumber="LENSE$LENSE_NUMBER[4]"
+MAKE="${!make}"
+MODEL="${!model}"
+MAX_APERTURE="${!maperture}"
+FOCAL_LENGTH="${!flength}"
+SERIAL_NUMBER="${!snumber}"
+
+# Request filter type
+printf "\n"
+read -e -p "Please specify the type of lense filter used (e.g. Hoya R72 Infrared): " FILTER
+
+# Request aperture value
+printf "\n"
+read -e -p "Please specify the aperture value used to take the photo (e.g. if you used f1.4 type: 1.4): " APERTURE
+
+# Request shutter speed used
+printf "\n"
+read -e -p "Please specify the shutter speed used to take the photo (e.g. if you used 1/500 type: 1/500): " SHUTTER
+
+printf "\nWriting data...\n\n"
+ 
+# write the information to file
+exiftool \
+    -overwrite_original -m \
+    -XMP-AnalogueData:LensFilter="$FILTER" \
+    -XMP-dc:title="$TITLE" \
+    -XMP-dc:description="$DESCRIPTION" \
+    -XMP-photoshop:DateCreated="$DATE_CREATED" \
+    -XMP-photoshop:Headline="$HEADLINE" \
+    -XMP-IptcExt:LocationCreated="[{City=$CITY2,CountryCode=$COUNTRY_CODE2,CountryName=$COUNTRY_NAME2,GPSAltitude=$ALTITUDE2,GPSLatitude=$LATITUDE2,GPSLongitude=$LONGITUDE2,LocationName=$LOCATION_NAME2,ProvinceState=$PROVINCE2,SubLocation=$SUB_LOCATION2,WorldRegion=$WORLD_REGION2}]" \
+    -XMP-IptcExt:LocationShown="[{City=$CITY,CountryCode=$COUNTRY_CODE,CountryName=$COUNTRY_NAME,GPSAltitude=$ALTITUDE,GPSLatitude=$LATITUDE,GPSLongitude=$LONGITUDE,LocationName=$LOCATION_NAME,ProvinceState=$PROVINCE,SubLocation=$SUB_LOCATION,WorldRegion=$WORLD_REGION}]" \
+    -XMP-exif:FNumber="$APERTURE" \
+    -XMP-exif:ApertureValue="$APERTURE" \
+    -XMP-exif:MaxApertureValue="$MAX_APERTURE" \
+    -XMP-exif:FocalLength="$FOCAL_LENGTH" \
+    -XMP-exif:ShutterSpeedValue="$SHUTTER" \
+    -XMP-exif:ExposureTime="$SHUTTER" \
+    -XMP-exif:GPSAltitude="$ALTITUDE" \
+    -XMP-exif:GPSAltitudeRef#=$ALTITUDE_REF \
+    -XMP-exif:GPSLatitude="$LATITUDE" \
+    -XMP-exif:GPSLongitude="$LONGITUDE" \
+    -XMP-aux:ImageNumber="$IMG_NO" \
+    -XMP-exifEX:LensMake="$MAKE" \
+    -XMP-exifEX:LensModel="$MODEL" \
+    -XMP-exifEX:LensSerialNumber="$SERIAL_NUMBER" \
+    "$1"
+eval ${SUBJECT}
+
+printf "\nData written successfully.\n\n"
+ 
+# display all the information from the file
+exiftool -a -g1 -m "$1"
