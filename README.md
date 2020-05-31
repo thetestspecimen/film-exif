@@ -145,7 +145,7 @@ For windows users:
 There are two ways you can use the scripts.
 
 1. Run the scripts from a consistent place, and specify the full path of the location of the photos
-2. Copy the script files to the folder where the photos live, and not have to bother with specifying th full path
+2. Copy the script files to the folder where the photos live, and not have to bother with specifying the full path
 
 You are likely to run into less problems with option 2, but it is completely up to you. I will give examples of both.
 
@@ -176,8 +176,8 @@ Note: for option 2 to work the scripts and the photos must be in the same folder
 
 For the script which runs on individual photos:
 
-1. `./exif-group "/home/username/photos-folder/photo.jpg"`
-2. `./exif-group "photo.jpg"`
+1. `./exif-ind "/home/username/photos-folder/photo.jpg"`
+2. `./exif-ind "photo.jpg"`
 
 Note: again, option 2 is only possible if the photo is in the same folder as the script
 
