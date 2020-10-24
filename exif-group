@@ -32,7 +32,7 @@ FILM_SIZES=( "35mm" "120" "220" "Large Format" )
 # remember to update the NUMBER_OF_FILMS
 # format in brackets ( "Film Make" "Film Make and Type" "Processing i.e. Black and White, C41 or E6" "ISO")
 
-NUMBER_OF_FILMS=32
+NUMBER_OF_FILMS=33
 FILM1=( "Ilford" "Ilford Delta 100" "Black and White" "100" )
 FILM2=( "Ilford" "Ilford Delta 400" "Black and White" "400" ) 
 FILM3=( "Ilford" "Ilford Delta 3200" "Black and White" "3200" ) 
@@ -65,6 +65,7 @@ FILM29=( "Fuji" "Fuji Provia F 100" "E6" "100" )
 FILM30=( "Fuji" "Fuji Velvia 50" "E6" "50" )
 FILM31=( "Fuji" "Fuji Velvia 100" "E6" "100" )
 FILM32=( "Fuji" "Fuji Fujichrome 64T" "E6" "64" )
+FILM33=( "Unknown" "Unknown Pelikan" "C41" "100" )
 
 # User Configuration End ###########################
 

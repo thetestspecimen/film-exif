@@ -8,12 +8,13 @@ copyright="©"
 # add as many lenses as you like following the number convention
 # remember to update the NUMBER_OF_LENSES
 
-NUMBER_OF_LENSES=5
+NUMBER_OF_LENSES=6
 LENSE1=( "Asahi" "Super-Multi-Coated Takumar 1:3.5/28" "3.5" "28" "4595856" )
 LENSE2=( "Asahi" "Super-Multi-Coated Takumar 1:1.4/50" "1.4" "50" "5531315" )
 LENSE3=( "Jupiter" "Jupiter-9 2/85" "2.0" "85" "N7211481" )
 LENSE4=( "Nikon" "Nikkor-P.C 1:4 f=200mm" "4.0" "200" "77934" )
-LENSE5=( "Yashica" "Yashinon-DX 1:1.7 f=45mm" "1.7" "45" "91049652" )
+LENSE5=( "Nikon" "Nikkor-P.C 1:2.8 f=75mm" "4.0" "75" "259903" )
+LENSE6=( "Yashica" "Yashinon-DX 1:1.7 f=45mm" "1.7" "45" "91049652" )
 
 
 # User Configuration End ###########################
