@@ -196,3 +196,5 @@ cash knocking about, I would encourage you to send some his way.
 ## License
 
 The content of this project is licensed under the [GNU General Public License v3.0](LICENSE.md)
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z7G2C89)
